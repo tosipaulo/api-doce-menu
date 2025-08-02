@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -15,58 +14,58 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  name     String
-  email    String  @unique
-  password String
-  phoneNumber    String
-  confirmToken       String?
-  resetToken         String?
-  resetExpires       DateTime?
-  linkCheckout       String?
-  acceptedTerms      Boolean       @default(false)
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
-  menus    Menu[]
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  password      String
+  phoneNumber   String
+  confirmToken  String?
+  resetToken    String?
+  resetExpires  DateTime?
+  linkCheckout  String?
+  acceptedTerms Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  menus         Menu[]
 }
 
 model Menu {
-  id         String               @id @default(uuid())
-  name       String
-  slug       String               @unique
-  user       User                 @relation(fields: [userId], references: [id])
-  userId     String
-  products   Product[]
-  analytics  Analytics[]
-  settings   RestaurantSettings?
+  id            String              @id @default(uuid())
+  name          String
+  slug          String              @unique
+  user          User                @relation(fields: [userId], references: [id])
+  userId        String
+  products      Product[]
+  analytics     Analytics[]
+  settings      RestaurantSettings?
   customDomains CustomDomain[]
 }
 
 model Product {
-  id          String     @id @default(uuid())
+  id          String      @id @default(uuid())
   name        String
   description String?
   price       Float
   imageUrl    String?
-  menu        Menu       @relation(fields: [menuId], references: [id])
+  menu        Menu        @relation(fields: [menuId], references: [id])
   menuId      String
   analytics   Analytics[]
 }
 
 model Analytics {
-  id         String    @id @default(uuid())
-  menu       Menu      @relation(fields: [menuId], references: [id])
-  menuId     String
-  product    Product?  @relation(fields: [productId], references: [id])
-  productId  String?   // opcional
-  action     String    // 'view' | 'click'
-  createdAt  DateTime  @default(now())
+  id        String   @id @default(uuid())
+  menu      Menu     @relation(fields: [menuId], references: [id])
+  menuId    String
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String? // opcional
+  action    String // 'view' | 'click'
+  createdAt DateTime @default(now())
 }
 
 model CustomDomain {
   id        String   @id @default(uuid())
   domain    String   @unique
-  slug      String   // slug do menu que será carregado nesse domínio
+  slug      String // slug do menu que será carregado nesse domínio
   verified  Boolean  @default(false)
   menu      Menu     @relation(fields: [menuId], references: [id])
   menuId    String
@@ -74,9 +73,9 @@ model CustomDomain {
 }
 
 model RestaurantSettings {
-  id          String   @id @default(uuid())
-  menu        Menu     @relation(fields: [menuId], references: [id])
-  menuId      String   @unique
+  id     String @id @default(uuid())
+  menu   Menu   @relation(fields: [menuId], references: [id])
+  menuId String @unique
 
   name        String
   description String?
@@ -84,6 +83,6 @@ model RestaurantSettings {
   address     String?
   themeColor  String?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
