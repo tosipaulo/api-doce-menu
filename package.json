@@ -7,7 +7,7 @@
     "build"
   ],
   "scripts": {
-    "dev": "ts-node-dev src/server.ts",
+    "dev": "prisma generate &&  ts-node-dev src/server.ts",
     "build": "npx tsc",
     "start": "npx nodemon dist/server.js",
     "build-prisma": "prisma generate",
