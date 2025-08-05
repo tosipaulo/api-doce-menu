@@ -2,15 +2,34 @@
 
 ## Acesso à Documentação
 
-A documentação da API está disponível através do Swagger UI na seguinte URL:
+A documentação da API está disponível através de múltiplas opções:
 
+### Opção 1: Documentação Simples (Recomendada para Vercel)
+```
+http://localhost:3000/docs-simple
+```
+
+### Opção 2: Swagger UI com CDN
+```
+http://localhost:3000/docs
+```
+
+### Opção 3: Swagger UI Padrão
 ```
 http://localhost:3000/api-docs
+```
+
+### Opção 4: JSON da API
+```
+http://localhost:3000/swagger.json
 ```
 
 ## Autenticação
 
 Para acessar a documentação do Swagger, você precisará fornecer as seguintes credenciais:
+
+- **Usuário:** Configure a variável `SWAGGER_USERNAME` no Vercel
+- **Senha:** Configure a variável `SWAGGER_PASSWORD` no Vercel
 
 ## Rotas Documentadas
 
@@ -36,14 +55,17 @@ Para acessar a documentação do Swagger, você precisará fornecer as seguintes
 
 ### Local
 1. Inicie o servidor com `npm run dev`
-2. Acesse `http://localhost:3000/api-docs`
-3. Digite as credenciais quando solicitado
-4. Explore as rotas disponíveis na interface do Swagger
+2. Acesse `http://localhost:3000/docs-simple` (recomendado)
+3. Ou acesse `http://localhost:3000/docs`
+4. Ou acesse `http://localhost:3000/api-docs`
+5. Digite as credenciais quando solicitado
+6. Explore as rotas disponíveis na interface do Swagger
 
 ### Vercel
-1. Acesse a URL de produção
-2. Digite as credenciais quando solicitado
-3. Se a interface não carregar, use o endpoint JSON com um visualizador online
+1. Acesse `https://seu-dominio.vercel.app/docs-simple` (recomendado)
+2. Ou acesse `https://seu-dominio.vercel.app/docs`
+3. Ou acesse `https://seu-dominio.vercel.app/api-docs`
+4. Se a interface não carregar, use `/swagger.json` com um visualizador online
 
 ## Recursos da Documentação
 
@@ -61,12 +83,19 @@ A documentação está protegida por autenticação básica para evitar acesso n
 ### Problema: Tela branca no Vercel
 Se você encontrar uma tela branca ao acessar o Swagger no Vercel:
 
-1. Use o endpoint JSON: `/swagger.json`
-2. Copie o conteúdo e cole no https://editor.swagger.io/
-3. Ou use o https://petstore.swagger.io/ com a URL do JSON
+1. **Use a documentação simples:** `/docs-simple` (mais confiável)
+2. **Use a página customizada:** `/docs`
+3. **Use o endpoint JSON:** `/swagger.json`
+4. **Visualizadores online:**
+   - https://editor.swagger.io/
+   - https://petstore.swagger.io/
 
 ### Variáveis de Ambiente
 Para produção, configure as seguintes variáveis de ambiente no Vercel:
-- `SWAGGER_USERNAME`: usuário para acesso (padrão: admin)
-- `SWAGGER_PASSWORD`: senha para acesso (padrão: senha@123)
-- `BASE_URL`: URL base da API 
+- `SWAGGER_USERNAME`: usuário para acesso
+- `SWAGGER_PASSWORD`: senha para acesso
+- `BASE_URL`: URL base da API
+
+### Erro de Content Security Policy:
+- A página `/docs-simple` não usa scripts externos
+- Use sempre `/docs-simple` em produção no Vercel 

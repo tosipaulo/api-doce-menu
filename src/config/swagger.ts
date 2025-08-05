@@ -54,17 +54,26 @@ const swaggerAuth = (req: any, res: any, next: any) => {
   }
 };
 
-// Configuração específica para Vercel
+// Configuração específica para Vercel com CDN
 const swaggerOptions = {
   explorer: true,
-  customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'API Doce Menu - Documentação',
   swaggerOptions: {
     docExpansion: 'list',
     filter: true,
     showRequestHeaders: true,
     tryItOutEnabled: true
-  }
+  },
+  customCss: `
+    .swagger-ui .topbar { display: none }
+    .swagger-ui .info .title { color: #333; }
+    .swagger-ui .scheme-container { background: #f8f9fa; }
+  `,
+  customJs: [
+    'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js'
+  ],
+  customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css'
 };
 
 export { specs, swaggerUi, swaggerAuth, swaggerOptions }; 
