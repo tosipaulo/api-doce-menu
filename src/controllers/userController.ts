@@ -7,6 +7,155 @@ import { configSMTP, configEmail } from "../config/nodemailer"
 
 const prisma = new PrismaClient();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *         - phoneNumber
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Nome completo do usuário
+ *           example: "João Silva"
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: Email do usuário
+ *           example: "joao@example.com"
+ *         password:
+ *           type: string
+ *           description: Senha do usuário
+ *           example: "senha123"
+ *         phoneNumber:
+ *           type: string
+ *           description: Número de telefone do usuário
+ *           example: "(11) 99999-9999"
+ *     UserResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: boolean
+ *           example: false
+ *         message:
+ *           type: string
+ *           example: "Olá! João Silva, seu usuário foi criado com sucesso!"
+ *         user:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *               example: "João Silva"
+ *             email:
+ *               type: string
+ *               example: "joao@example.com"
+ *             createdAt:
+ *               type: string
+ *               format: date-time
+ *               example: "2024-01-01T00:00:00.000Z"
+ *         token:
+ *           type: string
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *     LoginRequest:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: Email do usuário
+ *           example: "joao@example.com"
+ *         password:
+ *           type: string
+ *           description: Senha do usuário
+ *           example: "senha123"
+ *     ForgotPasswordRequest:
+ *       type: object
+ *       required:
+ *         - email
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: Email do usuário
+ *           example: "joao@example.com"
+ *     ResetPasswordRequest:
+ *       type: object
+ *       required:
+ *         - email
+ *         - token
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: Email do usuário
+ *           example: "joao@example.com"
+ *         token:
+ *           type: string
+ *           description: Token de redefinição de senha
+ *           example: "abc123def456"
+ *         password:
+ *           type: string
+ *           description: Nova senha
+ *           example: "novaSenha123"
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: boolean
+ *           example: true
+ *         message:
+ *           type: string
+ *           example: "Ops! Nome, e-mail, senha e telefone são obrigatórios."
+ */
+
+/**
+ * @swagger
+ * /user:
+ *   post:
+ *     summary: Criar novo usuário
+ *     description: Cria um novo usuário no sistema
+ *     tags: [Usuários]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: Usuário criado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponse'
+ *       400:
+ *         description: Dados obrigatórios não fornecidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       409:
+ *         description: Email já existe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 export const createUser = async (req: Request, res: Response) => {
   const { name, email, password, phoneNumber } = req.body;
 
@@ -54,6 +203,51 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /user/auth:
+ *   post:
+ *     summary: Autenticar usuário
+ *     description: Autentica um usuário existente no sistema
+ *     tags: [Usuários]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginRequest'
+ *     responses:
+ *       200:
+ *         description: Usuário autenticado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponse'
+ *       400:
+ *         description: Email ou senha não fornecidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Credenciais inválidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Usuário não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 export const autenticateUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -93,6 +287,52 @@ export const autenticateUser = async (req: Request, res: Response) => {
   }
 }
 
+/**
+ * @swagger
+ * /user/forgot-password:
+ *   post:
+ *     summary: Solicitar redefinição de senha
+ *     description: Envia um email com instruções para redefinir a senha
+ *     tags: [Usuários]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ForgotPasswordRequest'
+ *     responses:
+ *       200:
+ *         description: Email de redefinição enviado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Instruções para redefinir sua senha foram enviadas para o seu e-mail."
+ *       400:
+ *         description: Email não fornecido ou erro no envio
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Usuário não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
 
@@ -146,6 +386,46 @@ export const forgotPassword = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /user/reset-password:
+ *   post:
+ *     summary: Redefinir senha
+ *     description: Redefine a senha do usuário usando token de redefinição
+ *     tags: [Usuários]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ResetPasswordRequest'
+ *     responses:
+ *       200:
+ *         description: Senha redefinida com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Legal, nova senha alterada com sucesso!"
+ *       400:
+ *         description: Dados obrigatórios não fornecidos ou token inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno do servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 export const resetPassword = async (req: Request, res: Response) => {
   const { email, token, password } = req.body;
 
