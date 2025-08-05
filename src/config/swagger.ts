@@ -1,29 +1,38 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { userPaths } from './swagger-paths/user-paths';
+import { productPaths } from './swagger-paths/product-paths'; // Descomente quando adicionar produtos
 
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'API Doce Menu - Documentação',
-      version: '1.0.0',
-      description: 'Documentação da API do projeto Doce Menu',
-      contact: {
-        name: 'Suporte API',
-        email: 'suporte@docemenu.com'
-      }
-    },
-    servers: [
-      {
-        url: process.env.BASE_URL || 'http://localhost:3000',
-        description: 'Servidor de Desenvolvimento'
-      }
-    ]
+// Definição modular do Swagger que funciona no Vercel
+const specs = {
+  openapi: '3.0.0',
+  info: {
+    title: 'API Doce Menu - Documentação',
+    version: '1.0.0',
+    description: 'Documentação da API do projeto Doce Menu',
+    contact: {
+      name: 'Suporte API',
+      email: 'suporte@docemenu.com'
+    }
   },
-  apis: ['./src/routes/*.ts', './src/controllers/*.ts']
+  servers: [
+    {
+      url: process.env.BASE_URL || 'http://localhost:3000',
+      description: 'Servidor de Desenvolvimento'
+    }
+  ],
+  paths: {
+    // Rotas de usuário
+    ...userPaths,
+    // Rotas de produtos (descomente quando adicionar)
+    // ...productPaths,
+    
+    // Adicione mais rotas aqui conforme o projeto cresce
+    // ...orderPaths,
+    // ...categoryPaths,
+    // etc.
+  }
 };
-
-const specs = swaggerJsdoc(options);
 
 // Middleware de autenticação simples para o Swagger
 const swaggerAuth = (req: any, res: any, next: any) => {
