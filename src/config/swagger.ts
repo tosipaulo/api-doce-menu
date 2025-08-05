@@ -18,19 +18,6 @@ const options = {
         url: process.env.BASE_URL || 'http://localhost:3000',
         description: 'Servidor de Desenvolvimento'
       }
-    ],
-    components: {
-      securitySchemes: {
-        basicAuth: {
-          type: 'http',
-          scheme: 'basic'
-        }
-      }
-    },
-    security: [
-      {
-        basicAuth: []
-      }
     ]
   },
   apis: ['./src/routes/*.ts', './src/controllers/*.ts']
@@ -38,8 +25,12 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
-// Middleware de autenticação para o Swagger
+// Middleware de autenticação simples para o Swagger
 const swaggerAuth = (req: any, res: any, next: any) => {
+  // Verificar se as variáveis de ambiente estão definidas
+  const username = process.env.SWAGGER_USERNAME;
+  const password = process.env.SWAGGER_PASSWORD;
+  
   const auth = req.headers.authorization;
   
   if (!auth) {
@@ -47,15 +38,33 @@ const swaggerAuth = (req: any, res: any, next: any) => {
     return res.status(401).json({ error: 'Acesso negado' });
   }
 
-  const credentials = Buffer.from(auth.split(' ')[1], 'base64').toString();
-  const [username, password] = credentials.split(':');
+  try {
+    const credentials = Buffer.from(auth.split(' ')[1], 'base64').toString();
+    const [user, pass] = credentials.split(':');
 
-  if (username === process.env.SWAGGER_USERNAME && password === process.env.SWAGGER_PASSWORD) {
-    next();
-  } else {
+    if (user === username && pass === password) {
+      next();
+    } else {
+      res.setHeader('WWW-Authenticate', 'Basic realm="Swagger Documentation"');
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+  } catch (error) {
     res.setHeader('WWW-Authenticate', 'Basic realm="Swagger Documentation"');
     return res.status(401).json({ error: 'Credenciais inválidas' });
   }
 };
 
-export { specs, swaggerUi, swaggerAuth }; 
+// Configuração específica para Vercel
+const swaggerOptions = {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'API Doce Menu - Documentação',
+  swaggerOptions: {
+    docExpansion: 'list',
+    filter: true,
+    showRequestHeaders: true,
+    tryItOutEnabled: true
+  }
+};
+
+export { specs, swaggerUi, swaggerAuth, swaggerOptions }; 

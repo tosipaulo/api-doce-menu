@@ -5,7 +5,7 @@ import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes";
 import bodyParser from "body-parser";
-import { specs, swaggerUi, swaggerAuth } from "./config/swagger";
+import { specs, swaggerUi, swaggerAuth, swaggerOptions } from "./config/swagger";
 
 dotenv.config();
 
@@ -18,11 +18,14 @@ app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 app.use(bodyParser.json());
 
+// Endpoint para servir o JSON do Swagger
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(specs);
+});
+
 // Swagger Documentation com autenticação
-app.use('/api-docs', swaggerAuth, swaggerUi.serve, swaggerUi.setup(specs, {
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'API Doce Menu - Documentação'
-}));
+app.use('/api-docs', swaggerAuth, swaggerUi.serve, swaggerUi.setup(specs, swaggerOptions));
 
 app.use("/user", userRoutes);
 
