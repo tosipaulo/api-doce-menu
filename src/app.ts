@@ -3,9 +3,11 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
-import userRoutes from "./routes/userRoutes";
 import bodyParser from "body-parser";
 import { specs, swaggerUi, swaggerAuth, swaggerOptions } from "./config/swagger";
+
+import userRoutes from "./routes/userRoutes";
+import raffleRoutes from "./routes/raffleRoutes";
 
 dotenv.config();
 
@@ -95,6 +97,7 @@ app.get('/docs', swaggerAuth, (req, res) => {
 app.use('/api-docs', swaggerAuth, swaggerUi.serve, swaggerUi.setup(specs, swaggerOptions));
 
 app.use("/user", userRoutes);
+app.use("/raffle", raffleRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");
