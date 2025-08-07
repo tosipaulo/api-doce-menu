@@ -36,9 +36,14 @@ model Menu {
   user          User                @relation(fields: [userId], references: [id])
   userId        String
   products      Product[]
+  categories    Category[]
   analytics     Analytics[]
   settings      RestaurantSettings?
   customDomains CustomDomain[]
+  testimonials  Testimonial[]
+  howItWorks    HowItWorksStep[]
+  externalLinks ExternalLink[]
+  badges        Badge[]
 }
 
 model Product {
@@ -50,6 +55,59 @@ model Product {
   menu        Menu        @relation(fields: [menuId], references: [id])
   menuId      String
   analytics   Analytics[]
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String
+  menu     Menu      @relation(fields: [menuId], references: [id])
+  menuId   String
+  products Product[]
+}
+
+model Testimonial {
+  id        String  @id @default(uuid())
+  name      String
+  message   String
+  avatarUrl String?
+  rating    Int
+
+  menu   Menu   @relation(fields: [menuId], references: [id])
+  menuId String
+
+  createdAt DateTime @default(now())
+}
+
+model HowItWorksStep {
+  id          String  @id @default(uuid())
+  title       String
+  description String
+  icon        String?
+  order       Int
+
+  menu   Menu   @relation(fields: [menuId], references: [id])
+  menuId String
+}
+
+model ExternalLink {
+  id    String @id @default(uuid())
+  type  String // Ex: 'whatsapp', 'ifood', 'ubereats'
+  label String
+  url   String
+
+  menu   Menu   @relation(fields: [menuId], references: [id])
+  menuId String
+}
+
+model Badge {
+  id    String  @id @default(uuid())
+  label String
+  icon  String?
+
+  menu   Menu   @relation(fields: [menuId], references: [id])
+  menuId String
 }
 
 model Analytics {
@@ -88,11 +146,11 @@ model RestaurantSettings {
 }
 
 model Mailing {
-  id           String   @id @default(uuid())
-  name         String
-  email        String
-  phoneNumber  String
-  doceriaName  String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phoneNumber String
+  doceriaName String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
