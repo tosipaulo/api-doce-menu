@@ -4,6 +4,7 @@ import jwt, { Secret, JwtPayload, SignOptions, VerifyErrors } from 'jsonwebtoken
 
 interface AuthPayload {
   email: string;
+  id: string;
 }
 
 type Expiry = `${number}${"ms" | "s" | "m" | "h" | "d" | "w" | "y"}`;

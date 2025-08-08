@@ -8,6 +8,9 @@ import { specs, swaggerUi, swaggerAuth, swaggerOptions } from "./config/swagger"
 
 import userRoutes from "./routes/userRoutes";
 import raffleRoutes from "./routes/raffleRoutes";
+import menuRoute from "./routes/menuRoutes";
+import { tokenMiddleware } from "./middlewares/tokenMiddleware";
+import { verifyUser } from "./middlewares/userMiddleware";
 
 dotenv.config();
 
@@ -99,6 +102,11 @@ app.use('/api-docs', swaggerAuth, swaggerUi.serve, swaggerUi.setup(specs, swagge
 app.use("/user", userRoutes);
 app.use("/raffle", raffleRoutes);
 
+app.use(tokenMiddleware);
+app.use(verifyUser);
+app.use("/menu", menuRoute);
+
+// Rota de verificação da API
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
