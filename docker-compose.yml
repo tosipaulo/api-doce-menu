@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  postgresql:
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=doce_menu
+      - POSTGRESQL_PASSWORD=doce_menu
+      - POSTGRESQL_DATABASE=doce_menu
+    volumes:
+      - 'data_doce_menu:/bitnami/postgresql'
+
+volumes:
+  data_doce_menu:
