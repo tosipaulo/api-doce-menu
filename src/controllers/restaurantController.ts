@@ -1,4 +1,4 @@
-import e, { Response } from "express";
+import { Response } from "express";
 import { prisma } from '../lib/prisma'
 import { CustomRequest } from "../types/CustomRequest";
 

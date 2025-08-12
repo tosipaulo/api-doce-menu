@@ -13,6 +13,7 @@ import userRoutes from "./routes/userRoutes";
 import raffleRoutes from "./routes/raffleRoutes";
 import menuRoute from "./routes/menuRoutes";
 import restaurantSettings from  "./routes/restaurantRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
 
 dotenv.config();
 
@@ -108,6 +109,7 @@ app.use(tokenMiddleware);
 app.use(verifyUser);
 app.use("/menu", menuRoute);
 app.use("/restaurant", restaurantSettings);
+app.use("/upload", uploadRoutes);
 
 // Rota de verificação da API
 app.get("/", (req, res) => {
