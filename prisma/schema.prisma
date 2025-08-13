@@ -38,7 +38,7 @@ model Menu {
   products      Product[]
   categories    Category[]
   analytics     Analytics[]
-  settings      RestaurantSettings?
+  restaurantSettings      RestaurantSettings?
   customDomains CustomDomain[]
   testimonials  Testimonial[]
   howItWorks    HowItWorksStep[]
@@ -134,12 +134,16 @@ model RestaurantSettings {
   id     String @id @default(uuid())
   menu   Menu   @relation(fields: [menuId], references: [id])
   menuId String @unique
-
   name        String
+  title       String?
   description String?
   logoUrl     String?
   address     String?
   themeColor  String?
+  themeColorSecondary String?
+  whatsapp    String?
+  email       String?
+  phoneNumber String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

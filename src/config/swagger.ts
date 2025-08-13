@@ -3,6 +3,8 @@ import swaggerUi from 'swagger-ui-express';
 import { userPaths } from './swagger-paths/user-paths';
 import { productPaths } from './swagger-paths/product-paths'; // Descomente quando adicionar produtos
 import { menuPaths } from './swagger-paths/menu-paths';
+import { restaurantSettingPaths } from './swagger-paths/restaurantSetting-paths';
+import { uploadPaths } from './swagger-paths/upload-paths';
 // Definição modular do Swagger que funciona no Vercel
 const specs = {
   openapi: '3.0.0',
@@ -24,7 +26,8 @@ const specs = {
   paths: {
     // Rotas de usuário
     ...userPaths,
-    ...menuPaths,
+    ...restaurantSettingPaths,
+    ...uploadPaths,
     // Rotas de produtos (descomente quando adicionar)
     // ...productPaths,
     
