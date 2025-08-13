@@ -6,11 +6,14 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import { specs, swaggerUi, swaggerAuth, swaggerOptions } from "./config/swagger";
 
+import { tokenMiddleware } from "./middlewares/tokenMiddleware";
+import { verifyUser } from "./middlewares/userMiddleware";
+
 import userRoutes from "./routes/userRoutes";
 import raffleRoutes from "./routes/raffleRoutes";
 import menuRoute from "./routes/menuRoutes";
-import { tokenMiddleware } from "./middlewares/tokenMiddleware";
-import { verifyUser } from "./middlewares/userMiddleware";
+import restaurantSettings from  "./routes/restaurantRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
 
 dotenv.config();
 
@@ -105,6 +108,8 @@ app.use("/raffle", raffleRoutes);
 app.use(tokenMiddleware);
 app.use(verifyUser);
 app.use("/menu", menuRoute);
+app.use("/restaurant", restaurantSettings);
+app.use("/upload", uploadRoutes);
 
 // Rota de verificação da API
 app.get("/", (req, res) => {
