@@ -14,6 +14,7 @@ import raffleRoutes from "./routes/raffleRoutes";
 import menuRoute from "./routes/menuRoutes";
 import restaurantSettings from  "./routes/restaurantRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
+import productRoutes from  "./routes/productRoutes";
 
 dotenv.config();
 
@@ -110,6 +111,7 @@ app.use(verifyUser);
 app.use("/menu", menuRoute);
 app.use("/restaurant", restaurantSettings);
 app.use("/upload", uploadRoutes);
+app.use("/product", productRoutes);
 
 // Rota de verificação da API
 app.get("/", (req, res) => {
