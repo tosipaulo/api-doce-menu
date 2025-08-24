@@ -28,8 +28,7 @@ const specs = {
     ...userPaths,
     ...restaurantSettingPaths,
     ...uploadPaths,
-    // Rotas de produtos (descomente quando adicionar)
-    // ...productPaths,
+    ...productPaths,
     
     // Adicione mais rotas aqui conforme o projeto cresce
     // ...orderPaths,
