@@ -5,14 +5,21 @@ import { CustomRequest } from "../types/CustomRequest";
 export const getRestaurantSettings = async (req: CustomRequest, res: Response) => {
     
     const userId = req.userId;
-    const { slug } = req.params;
+    const { slug } = req.query;
+
+    if (!slug) {
+        return res.status(400).json({
+            error: true,
+            message: "Ops! O url do estabelecimento é obrigatório.",
+        });
+    }
 
     try {
         const restaurant = await prisma.restaurantSettings.findFirst({
             where: {
                 menu: {
-                    userId: userId,
-                    slug
+                    userId,
+                    slug: String(slug)
                 }
             },
             include: {
@@ -27,6 +34,26 @@ export const getRestaurantSettings = async (req: CustomRequest, res: Response) =
             }
         });
 
+        const products = await prisma.product.findMany({
+            where: {
+                menu: {
+                    id: restaurant?.menu.id,
+                    userId
+                }
+            },
+            take: 6,
+            orderBy: {
+                createdAt: 'desc'
+            },
+            select: {
+                id: false,
+                name: true,
+                description: true,
+                price: true,
+            }
+        });
+
+
         if (!restaurant) {
             return res.status(404).json({
                 error: true,
@@ -36,7 +63,8 @@ export const getRestaurantSettings = async (req: CustomRequest, res: Response) =
 
         return res.status(200).json({
             error: false,
-            restaurant
+            restaurant,
+            products
         });
 
     } catch (error) {
