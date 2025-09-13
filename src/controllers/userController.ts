@@ -78,6 +78,15 @@ export const autenticateUser = async (req: Request, res: Response) => {
     }
 
     const token = generateTokenJWT({ email, id: user.id });
+    const isProd = process.env.NODE_ENV === 'production';
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: !!isProd,
+      sameSite: isProd ? 'none' : 'lax',
+      path: '/',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
+    });
 
     return res.status(200).json({
       error: false,
@@ -86,8 +95,7 @@ export const autenticateUser = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         phoneNumber: user.phoneNumber,
-      },
-      token
+      }
     });
   } catch (error) {
     console.error("Erro ao autenticar usuário:", error);

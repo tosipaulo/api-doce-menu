@@ -5,7 +5,7 @@ import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import { specs, swaggerUi, swaggerAuth, swaggerOptions } from "./config/swagger";
-
+import cookieParser from 'cookie-parser';
 import { tokenMiddleware } from "./middlewares/tokenMiddleware";
 import { verifyUser } from "./middlewares/userMiddleware";
 
@@ -22,7 +22,27 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
-app.use(cors({ origin: "*", credentials: true }));
+app.set('trust proxy', 1);
+const ALLOWED_ORIGINS = new Set([
+  'http://localhost:4200',
+  'https://docemenu.com',
+  'http://localhost:3300',
+  'http://localhost:3000'
+]);
+
+const corsOptions: cors.CorsOptions = {
+  origin(origin, callback) {
+    if (!origin || ALLOWED_ORIGINS.has(origin)) return callback(null, true);
+    return callback(new Error('Origin not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Set-Cookie'],
+};
+  
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 // Configuração do Helmet para permitir CDN
 app.use(helmet({
@@ -102,6 +122,8 @@ app.get('/docs', swaggerAuth, (req, res) => {
 
 // Swagger Documentation com autenticação
 app.use('/api-docs', swaggerAuth, swaggerUi.serve, swaggerUi.setup(specs, swaggerOptions));
+
+app.use(cookieParser());
 
 app.use("/user", userRoutes);
 app.use("/raffle", raffleRoutes);
