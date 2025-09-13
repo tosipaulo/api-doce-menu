@@ -42,7 +42,7 @@ const corsOptions: cors.CorsOptions = {
 };
   
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 // Configuração do Helmet para permitir CDN
 app.use(helmet({
