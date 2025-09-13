@@ -3,34 +3,16 @@ import { Response, NextFunction } from 'express';
 import { CustomRequest } from '../types/CustomRequest';
 
 export const tokenMiddleware = (req: CustomRequest, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
+    let tokenCookie = req.cookies?.token as string | undefined;
 
-    if (!authHeader) {
+    if (!tokenCookie) {
         return res.status(401).send({
             error: true,
             message: 'Ops! Acho algo aconteceu com seu login.',
         });
     }
 
-    const parts = authHeader.split(' ');
-
-    if (parts.length !== 2) {
-        return res.status(401).send({
-        error: true,
-        message: 'Ops! Acho algo aconteceu com seu login.',
-        });
-    } 
-
-    const [scheme, token] = parts;
-
-    if (!/^Bearer$/i.test(scheme)) {
-        return res.status(401).send({
-            error: true,
-            message: 'Ops! Acho algo aconteceu com sua autenticação.',
-        });
-    }
-
-    verifyToken(token, (err, decoded) => {
+    verifyToken(tokenCookie, (err, decoded) => {
         if (err || !decoded) {
             return res
                 .status(401)
