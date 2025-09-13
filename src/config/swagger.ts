@@ -29,7 +29,7 @@ const specs = {
     ...restaurantSettingPaths,
     ...uploadPaths,
     ...productPaths,
-    
+    ...menuPaths,
     // Adicione mais rotas aqui conforme o projeto cresce
     // ...orderPaths,
     // ...categoryPaths,
