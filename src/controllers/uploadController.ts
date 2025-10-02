@@ -22,25 +22,25 @@ const uploadToCloudinary = (buffer: Buffer, folder: string): Promise<string> => 
 
 export const uploadImage = async (req: CustomRequest, res: Response) => {
   try {
-    const { type, id } = req.body;
+    const { type } = req.body;
     const userId = req.userId;
 
     if (!req.file) return res.status(400).json({ error: true, message: 'Ops! Parece que nenhum arquivo foi enviado.' });
-    if (!type || !id) return res.status(400).json({ error: true, message: 'Ops! Parece que estão faltando informações.' });
+    if (!type) return res.status(400).json({ error: true, message: 'Ops! Parece que estão faltando informações.' });
 
     let folder = '';
     if (type === 'restaurant') folder = 'restaurant_images';
     else if (type === 'product') folder = 'product_images';
+    else if (type === 'logo') folder = 'logo_images';
     else return res.status(400).json({ error: true, message: 'Tipo inválido.' });
 
     const imageUrl = await uploadToCloudinary(req.file.buffer, folder);
 
     let updatedRecord;
 
-    if (type === 'restaurant') {
+    if (type === 'restaurant' || type === 'logo') {
         const restaurant = await prisma.restaurantSettings.findFirst({
             where: {
-                id,
                 menu: {
                     userId: userId,
                 },
@@ -53,18 +53,21 @@ export const uploadImage = async (req: CustomRequest, res: Response) => {
         if (!restaurant) {
             return res.status(403).json({ error: true, message: 'Ops! Restaurante não encontrado.' });
         }
+        const updateData: any = {};
+        if (type === 'restaurant') {
+            updateData.imagemHighlight = imageUrl;
+        } else if (type === 'logo') {
+            updateData.logoUrl = imageUrl;
+        }
 
         updatedRecord = await prisma.restaurantSettings.update({
-            where: { id },
-            data: {
-                logoUrl: imageUrl,
-            }
+            where: { id: restaurant.id },
+            data: updateData,
         });
 
     } else if (type === 'product') {
         const product = await prisma.product.findFirst({
             where: {
-                id,
                 menu: {
                     userId: userId,
                 },
@@ -75,7 +78,7 @@ export const uploadImage = async (req: CustomRequest, res: Response) => {
             return res.status(403).json({ error: true, message: 'Ops! Produto não encontrado.' });
         }
         updatedRecord = await prisma.product.update({
-            where: { id },
+            where: { id: product.id },
             data: { imageUrl },
         });
     }
