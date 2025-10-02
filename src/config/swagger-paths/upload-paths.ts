@@ -27,11 +27,6 @@ export const uploadPaths = {
                   enum: ['restaurant', 'product', 'logo'],
                   description: 'Tipo de registro para atualizar',
                   example: 'restaurant'
-                },
-                id: {
-                  type: 'string',
-                  description: 'ID do restaurante ou produto',
-                  example: '123e4567-e89b-12d3-a456-426614174000'
                 }
               }
             }
