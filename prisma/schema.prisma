@@ -137,12 +137,15 @@ model RestaurantSettings {
   menu   Menu   @relation(fields: [menuId], references: [id])
   menuId String @unique
   name        String
-  title       String?
-  description String?
+  badgeText   String? @default("Feito com amor")
+  title       String? @default("O melhor jeito de")
+  subtitle    String? @default("terminar o seu dia")
+  description String? @default("Doces caseiros feitos com amor e carinho. Sabores que despertam memórias e criam novos momentos especiais para toda família.")
   logoUrl     String?
+  imagemHighlight String?
   address     String?
-  themeColor  String?
-  themeColorSecondary String?
+  themeColor  String? @default("rose")
+  themeColorSecondary String? @default("amber")
   whatsapp    String?
   email       String?
   phoneNumber String?

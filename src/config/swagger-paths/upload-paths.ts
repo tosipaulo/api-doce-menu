@@ -24,7 +24,7 @@ export const uploadPaths = {
                 },
                 type: {
                   type: 'string',
-                  enum: ['restaurant', 'product'],
+                  enum: ['restaurant', 'product', 'logo'],
                   description: 'Tipo de registro para atualizar',
                   example: 'restaurant'
                 },
