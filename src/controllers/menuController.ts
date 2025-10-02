@@ -1,4 +1,4 @@
-import e, { Response } from "express";
+import { Response } from "express";
 import { prisma } from '../lib/prisma'
 import { CustomRequest } from "../types/CustomRequest";
 
@@ -51,6 +51,9 @@ export const createMenu = async (req: CustomRequest, res: Response) => {
         slug,
         user: {
           connect: { id: userId },
+        },
+        restaurantSettings: { 
+            create: { name }
         },
       },
     });

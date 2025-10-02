@@ -44,11 +44,19 @@ export const restaurantSettingPaths = {
                         type: 'string',
                         example: 'Título do Restaurante'
                       },
+                      subtitle: {
+                        type: 'string',
+                        example: 'Subtitle do Restaurante'
+                      },
                       description: {
                         type: 'string',
                         example: 'Descrição do restaurante'
                       },
                       logoUrl: {
+                        type: 'string',
+                        example: 'https://example.com/logo.png'
+                      },
+                      imagemHighlight: {
                         type: 'string',
                         example: 'https://example.com/logo.png'
                       },
