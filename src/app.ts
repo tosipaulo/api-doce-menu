@@ -16,6 +16,7 @@ import restaurantSettings from  "./routes/restaurantRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
 import productRoutes from  "./routes/productRoutes";
 import analyticsRoutes from "./routes/analyticsRoutes";
+import landingPageRoutes from "./routes/landingPageRoutes";
 
 dotenv.config();
 
@@ -128,6 +129,7 @@ app.use(cookieParser());
 
 app.use("/user", userRoutes);
 app.use("/raffle", raffleRoutes);
+app.use("/landing-page", landingPageRoutes);
 
 app.use(tokenMiddleware);
 app.use(verifyUser);
