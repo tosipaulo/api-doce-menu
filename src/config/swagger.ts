@@ -5,6 +5,8 @@ import { productPaths } from './swagger-paths/product-paths'; // Descomente quan
 import { menuPaths } from './swagger-paths/menu-paths';
 import { restaurantSettingPaths } from './swagger-paths/restaurantSetting-paths';
 import { uploadPaths } from './swagger-paths/upload-paths';
+import { analyticsPaths } from './swagger-paths/analytics-paths';
+import { landingPagePaths } from './swagger-paths/landingPage-paths';
 // Definição modular do Swagger que funciona no Vercel
 const specs = {
   openapi: '3.0.0',
@@ -28,8 +30,10 @@ const specs = {
     ...userPaths,
     ...restaurantSettingPaths,
     ...uploadPaths,
+    ...analyticsPaths,
     ...productPaths,
     ...menuPaths,
+    ...landingPagePaths,
     // Adicione mais rotas aqui conforme o projeto cresce
     // ...orderPaths,
     // ...categoryPaths,
