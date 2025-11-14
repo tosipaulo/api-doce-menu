@@ -150,14 +150,26 @@ export const updateProduct = async (req: CustomRequest, res: Response) => {
             });
         }
 
-        if (categoryId) {
-            const category = await prisma.category.findFirst({
-                where: { id: categoryId, menuId },
-            });
+        const productFind = await prisma.product.findFirst({
+            where: { id: menu.id },
+        });
 
-            if (!category) {
-                return res.status(400).json({ error: true, message: "Categoria inválida para este menu" });
-            }
+        if (!productFind) {
+            return res.status(404).json({
+                error: true,
+                message: "Ops! Produto não encontrado.",
+            });
+        }
+
+        const category = await prisma.category.findFirst({
+            where: { id: categoryId, menuId },
+        });
+
+        if (!category) {
+            return res.status(404).json({ 
+                error: true,
+                message: "Ops! Categoria não encontrada.",
+            });
         }
 
         const product = await prisma.product.findFirst({

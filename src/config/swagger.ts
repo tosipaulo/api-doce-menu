@@ -3,6 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import { userPaths } from './swagger-paths/user-paths';
 import { productPaths } from './swagger-paths/product-paths'; // Descomente quando adicionar produtos
 import { menuPaths } from './swagger-paths/menu-paths';
+import { categoryPaths } from './swagger-paths/category-paths';
 import { restaurantSettingPaths } from './swagger-paths/restaurantSetting-paths';
 import { uploadPaths } from './swagger-paths/upload-paths';
 import { analyticsPaths } from './swagger-paths/analytics-paths';
@@ -32,6 +33,7 @@ const specs = {
     ...uploadPaths,
     ...analyticsPaths,
     ...productPaths,
+    ...categoryPaths,
     ...menuPaths,
     ...landingPagePaths,
     // Adicione mais rotas aqui conforme o projeto cresce
