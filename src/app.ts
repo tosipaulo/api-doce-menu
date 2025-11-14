@@ -15,6 +15,7 @@ import menuRoute from "./routes/menuRoutes";
 import restaurantSettings from  "./routes/restaurantRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
 import productRoutes from  "./routes/productRoutes";
+import categoryRoutes from  "./routes/categoryRoutes";
 import analyticsRoutes from "./routes/analyticsRoutes";
 import landingPageRoutes from "./routes/landingPageRoutes";
 
@@ -137,6 +138,7 @@ app.use("/menu", menuRoute);
 app.use("/restaurant", restaurantSettings);
 app.use("/upload", uploadRoutes);
 app.use("/product", productRoutes);
+app.use("/category", categoryRoutes);
 app.use("/analytics", analyticsRoutes);
 
 // Rota de verificação da API
