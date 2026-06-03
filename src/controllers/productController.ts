@@ -150,22 +150,22 @@ export const updateProduct = async (req: CustomRequest, res: Response) => {
             });
         }
 
-        const productFind = await prisma.product.findFirst({
-            where: { id: menu.id },
-        });
+        // const productFind = await prisma.product.findFirst({
+        //     where: { id: menu.id },
+        // });
 
-        if (!productFind) {
-            return res.status(404).json({
-                error: true,
-                message: "Ops! Produto não encontrado.",
-            });
-        }
+        // if (!productFind) {
+        //     return res.status(404).json({
+        //         error: true,
+        //         message: "Ops! Produto não encontrado.",
+        //     });
+        // }
 
         const category = await prisma.category.findFirst({
             where: { id: categoryId, menuId },
         });
 
-        if (!category) {
+        if (!category && menuId !== menu.id) {
             return res.status(404).json({ 
                 error: true,
                 message: "Ops! Categoria não encontrada.",
@@ -186,7 +186,7 @@ export const updateProduct = async (req: CustomRequest, res: Response) => {
         });
 
 
-        if(!product) {
+        if(!product && menuId !== menu.id) {
             return res.status(422).send({
                 error: true,
                 message: 'Ops! Parece que não existe esse produto.'
@@ -194,7 +194,7 @@ export const updateProduct = async (req: CustomRequest, res: Response) => {
         }
 
         await prisma.product.update({
-            where: { id: product.id },
+            where: { id: product?.id },
             data: {
                 ...rest,
                 ...(categoryId && { categoryId }),
