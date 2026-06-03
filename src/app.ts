@@ -30,7 +30,8 @@ const ALLOWED_ORIGINS = new Set([
   'http://localhost:4200',
   'https://docemenu.com',
   'http://localhost:3300',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://localhost:5173'
 ]);
 
 const corsOptions: cors.CorsOptions = {
