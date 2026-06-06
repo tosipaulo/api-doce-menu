@@ -1,5 +1,114 @@
 export const analyticsPaths = {
   '/analytics': {
+    get: {
+      tags: ['Analytics'],
+      summary: 'Dados do dashboard de analytics',
+      description: 'Retorna totais, produtos mais clicados e evolução diária de views para um menu no período informado',
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          name: 'menuId',
+          in: 'query',
+          required: true,
+          description: 'ID do menu',
+          schema: { type: 'string' },
+          example: 'clx1234567890abcdef'
+        },
+        {
+          name: 'period',
+          in: 'query',
+          required: false,
+          description: 'Período de análise (default: 30d)',
+          schema: { type: 'string', enum: ['7d', '30d', '90d'], default: '30d' }
+        }
+      ],
+      responses: {
+        200: {
+          description: 'Dados de analytics retornados com sucesso',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: false },
+                  period: { type: 'string', example: '30d' },
+                  totals: {
+                    type: 'object',
+                    properties: {
+                      views: { type: 'integer', example: 320 },
+                      clicks: { type: 'integer', example: 87 }
+                    }
+                  },
+                  topProducts: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        productId: { type: 'string', example: 'clx9876543210fedcba' },
+                        name: { type: 'string', example: 'Brigadeiro de chocolate' },
+                        clicks: { type: 'integer', example: 34 }
+                      }
+                    }
+                  },
+                  dailyViews: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        date: { type: 'string', example: '2024-05-01' },
+                        count: { type: 'integer', example: 12 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        400: {
+          description: 'Parâmetros inválidos',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: "Ops! 'menuId' é obrigatório." }
+                }
+              }
+            }
+          }
+        },
+        404: {
+          description: 'Menu não encontrado ou não pertence ao usuário autenticado',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Ops! Menu não encontrado.' }
+                }
+              }
+            }
+          }
+        },
+        500: {
+          description: 'Erro interno do servidor',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Erro interno do servidor' }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     post: {
       tags: ['Analytics'],
       summary: 'Registrar evento de analytics',

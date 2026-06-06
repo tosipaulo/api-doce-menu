@@ -8,6 +8,10 @@ import { restaurantSettingPaths } from './swagger-paths/restaurantSetting-paths'
 import { uploadPaths } from './swagger-paths/upload-paths';
 import { analyticsPaths } from './swagger-paths/analytics-paths';
 import { landingPagePaths } from './swagger-paths/landingPage-paths';
+import { testimonialPaths } from './swagger-paths/testimonial-paths';
+import { howItWorksPaths } from './swagger-paths/howItWorks-paths';
+import { externalLinkPaths } from './swagger-paths/externalLink-paths';
+import { badgePaths } from './swagger-paths/badge-paths';
 // Definição modular do Swagger que funciona no Vercel
 const specs = {
   openapi: '3.0.0',
@@ -36,6 +40,10 @@ const specs = {
     ...categoryPaths,
     ...menuPaths,
     ...landingPagePaths,
+    ...testimonialPaths,
+    ...howItWorksPaths,
+    ...externalLinkPaths,
+    ...badgePaths,
     // Adicione mais rotas aqui conforme o projeto cresce
     // ...orderPaths,
     // ...categoryPaths,

@@ -136,9 +136,9 @@ export const updateRestaurantSettings = async (req: CustomRequest, res: Response
         });
 
         if(!restaurant) {
-            return res.status(422).send({
+            return res.status(404).json({
                 error: true,
-                message: 'Ops! Parece que não existe esse restaurante.'
+                message: 'Ops! Restaurante não encontrado.'
             });
         }
 
@@ -188,9 +188,9 @@ export const deleteRestaurantSettings = async (req: CustomRequest, res: Response
         });
 
         if(!restaurant) {
-            return res.status(422).send({
+            return res.status(404).json({
                 error: true,
-                message: 'Ops! Parece que não existe esse restaurante.'
+                message: 'Ops! Restaurante não encontrado.'
             });
         }
 

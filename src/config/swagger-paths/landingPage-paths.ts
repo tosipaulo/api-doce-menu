@@ -2,114 +2,127 @@ export const landingPagePaths = {
   '/landing-page': {
     get: {
       tags: ['Landing Page'],
-      summary: 'Buscar configurações da landing page',
-      description: 'Retorna as configurações da landing page baseado no slug do menu',
-      security: [{ bearerAuth: [] }],
+      summary: 'Dados completos da landing page pública',
+      description: 'Retorna todos os dados necessários para montar a página pública do estabelecimento. Endpoint público, não requer autenticação.',
       parameters: [
         {
           name: 'slug',
           in: 'query',
           required: true,
-          description: 'Slug do menu do restaurante',
-          schema: {
-            type: 'string'
-          },
-          example: 'meu-restaurante'
+          description: 'Slug do menu do estabelecimento',
+          schema: { type: 'string' },
+          example: 'minha-doceria'
         }
       ],
       responses: {
         200: {
-          description: 'Configurações do restaurante encontradas com sucesso',
+          description: 'Dados da landing page retornados com sucesso',
           content: {
             'application/json': {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: false
-                  },
+                  error: { type: 'boolean', example: false },
                   restaurant: {
                     type: 'object',
                     properties: {
-                      id: {
-                        type: 'string',
-                        example: 'clx1234567890abcdef'
-                      },
-                      name: {
-                        type: 'string',
-                        example: 'Meu Restaurante'
-                      },
-                      title: {
-                        type: 'string',
-                        example: 'Título do Restaurante'
-                      },
-                      subtitle: {
-                        type: 'string',
-                        example: 'Subtitle do Restaurante'
-                      },
-                      description: {
-                        type: 'string',
-                        example: 'Descrição do restaurante'
-                      },
-                      logoUrl: {
-                        type: 'string',
-                        example: 'https://example.com/logo.png'
-                      },
-                      imagemHighlight: {
-                        type: 'string',
-                        example: 'https://example.com/logo.png'
-                      },
-                      address: {
-                        type: 'string',
-                        example: 'Rua das Flores, 123'
-                      },
-                      themeColor: {
-                        type: 'string',
-                        example: '#FF6B6B'
-                      },
-                      themeColorSecondary: {
-                        type: 'string',
-                        example: '#4ECDC4'
-                      },
-                      whatsapp: {
-                        type: 'string',
-                        example: '+5511999999999'
-                      },
-                      email: {
-                        type: 'string',
-                        example: 'contato@restaurante.com'
-                      },
-                      phoneNumber: {
-                        type: 'string',
-                        example: '+5511888888888'
-                      },
-                      createdAt: {
-                        type: 'string',
-                        format: 'date-time',
-                        example: '2024-01-01T00:00:00.000Z'
-                      },
-                      updatedAt: {
-                        type: 'string',
-                        format: 'date-time',
-                        example: '2024-01-01T00:00:00.000Z'
-                      },
+                      id: { type: 'string', example: 'clx1234567890abcdef' },
+                      name: { type: 'string', example: 'Minha Doceria' },
+                      badgeText: { type: 'string', example: 'Feito com amor' },
+                      title: { type: 'string', example: 'O melhor jeito de' },
+                      subtitle: { type: 'string', example: 'terminar o seu dia' },
+                      description: { type: 'string', example: 'Doces caseiros feitos com amor.' },
+                      logoUrl: { type: 'string', nullable: true, example: 'https://res.cloudinary.com/example/logo.png' },
+                      imagemHighlight: { type: 'string', nullable: true, example: 'https://res.cloudinary.com/example/highlight.png' },
+                      address: { type: 'string', nullable: true, example: 'Rua das Flores, 123' },
+                      themeColor: { type: 'string', example: 'rose' },
+                      themeColorSecondary: { type: 'string', example: 'amber' },
+                      whatsapp: { type: 'string', nullable: true, example: '5511999999999' },
+                      email: { type: 'string', nullable: true, example: 'contato@doceria.com' },
+                      phoneNumber: { type: 'string', nullable: true, example: '5511888888888' },
                       menu: {
                         type: 'object',
                         properties: {
-                          id: {
-                            type: 'string',
-                            example: 'clx1234567890abcdef'
-                          },
-                          name: {
-                            type: 'string',
-                            example: 'Menu - Meu Restaurante'
-                          },
-                          slug: {
-                            type: 'string',
-                            example: 'meu-restaurante'
-                          }
+                          id: { type: 'string', example: 'clx1234567890abcdef' },
+                          name: { type: 'string', example: 'Menu - Minha Doceria' },
+                          slug: { type: 'string', example: 'minha-doceria' }
                         }
+                      }
+                    }
+                  },
+                  products: {
+                    type: 'array',
+                    description: '6 produtos mais recentes',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', example: 'clx9876543210fedcba' },
+                        name: { type: 'string', example: 'Brigadeiro de chocolate' },
+                        description: { type: 'string', nullable: true, example: 'Brigadeiro belga com granulado' },
+                        price: { type: 'number', nullable: true, example: 5.90 },
+                        imageUrl: { type: 'string', nullable: true, example: 'https://res.cloudinary.com/example/product.png' },
+                        categoryId: { type: 'string', nullable: true, example: 'clxcat123' }
+                      }
+                    }
+                  },
+                  categories: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', example: 'clxcat123' },
+                        name: { type: 'string', example: 'Doces' }
+                      }
+                    }
+                  },
+                  testimonials: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', example: 'clxtest123' },
+                        name: { type: 'string', example: 'Maria Silva' },
+                        message: { type: 'string', example: 'Melhor doceria da cidade!' },
+                        avatarUrl: { type: 'string', nullable: true, example: null },
+                        rating: { type: 'integer', example: 5 },
+                        createdAt: { type: 'string', format: 'date-time' }
+                      }
+                    }
+                  },
+                  howItWorks: {
+                    type: 'array',
+                    description: 'Ordenado pelo campo order ASC',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', example: 'clxhow123' },
+                        title: { type: 'string', example: 'Escolha seus doces' },
+                        description: { type: 'string', example: 'Navegue pelo cardápio e escolha.' },
+                        icon: { type: 'string', nullable: true, example: 'cake' },
+                        order: { type: 'integer', example: 1 }
+                      }
+                    }
+                  },
+                  externalLinks: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', example: 'clxlink123' },
+                        type: { type: 'string', example: 'whatsapp' },
+                        label: { type: 'string', example: 'Peça pelo WhatsApp' },
+                        url: { type: 'string', example: 'https://wa.me/5511999999999' }
+                      }
+                    }
+                  },
+                  badges: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', example: 'clxbadge123' },
+                        label: { type: 'string', example: 'Feito com amor' },
+                        icon: { type: 'string', nullable: true, example: 'heart' }
                       }
                     }
                   }
@@ -118,41 +131,29 @@ export const landingPagePaths = {
             }
           }
         },
-        401: {
-          description: 'Não autorizado - Token inválido ou ausente',
+        400: {
+          description: 'Slug não informado',
           content: {
             'application/json': {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Token inválido'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Ops! O url do estabelecimento é obrigatório.' }
                 }
               }
             }
           }
         },
         404: {
-          description: 'Restaurante não encontrado',
+          description: 'Estabelecimento não encontrado',
           content: {
             'application/json': {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Restaurante não encontrado.'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Restaurante não encontrado.' }
                 }
               }
             }
@@ -165,14 +166,8 @@ export const landingPagePaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Erro interno do servidor'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Erro interno do servidor' }
                 }
               }
             }

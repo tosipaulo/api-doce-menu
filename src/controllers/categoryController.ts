@@ -120,9 +120,9 @@ export const updateCategory = async (req: CustomRequest, res: Response) => {
     });
 
     if (!category) {
-      return res.status(422).send({
+      return res.status(404).json({
         error: true,
-        message: 'Ops! Parece que não existe essa categoria.'
+        message: 'Ops! Categoria não encontrada.'
       });
     }
 
@@ -160,9 +160,9 @@ export const deleteCategory = async (req: CustomRequest, res: Response) => {
     });
 
     if (!category) {
-      return res.status(422).send({
+      return res.status(404).json({
         error: true,
-        message: 'Ops! Parece que não existe essa categoria.'
+        message: 'Ops! Categoria não encontrada.'
       });
     }
 

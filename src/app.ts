@@ -18,6 +18,10 @@ import productRoutes from  "./routes/productRoutes";
 import categoryRoutes from  "./routes/categoryRoutes";
 import analyticsRoutes from "./routes/analyticsRoutes";
 import landingPageRoutes from "./routes/landingPageRoutes";
+import testimonialRoutes from "./routes/testimonialRoutes";
+import howItWorksRoutes from "./routes/howItWorksRoutes";
+import externalLinkRoutes from "./routes/externalLinkRoutes";
+import badgeRoutes from "./routes/badgeRoutes";
 
 dotenv.config();
 
@@ -141,6 +145,10 @@ app.use("/upload", uploadRoutes);
 app.use("/product", productRoutes);
 app.use("/category", categoryRoutes);
 app.use("/analytics", analyticsRoutes);
+app.use("/testimonial", testimonialRoutes);
+app.use("/how-it-works", howItWorksRoutes);
+app.use("/external-link", externalLinkRoutes);
+app.use("/badge", badgeRoutes);
 
 // Rota de verificação da API
 app.get("/", (req, res) => {

@@ -93,9 +93,9 @@ export const updateMenu = async (req: CustomRequest, res: Response) => {
         });
 
         if(!menu) {
-            return res.status(422).send({
+            return res.status(404).json({
                 error: true,
-                message: 'Ops! Parece que não existe esse menu.'
+                message: 'Ops! Menu não encontrado.'
             });
         }
 
@@ -134,9 +134,9 @@ export const deleteMenu = async (req: CustomRequest, res: Response) => {
         });
 
         if(!menu) {
-            return res.status(422).send({
+            return res.status(404).json({
                 error: true,
-                message: 'Ops! Parece que não existe esse menu.'
+                message: 'Ops! Menu não encontrado.'
             });
         }
 
