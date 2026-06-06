@@ -22,11 +22,12 @@ const uploadToCloudinary = (buffer: Buffer, folder: string): Promise<string> => 
 
 export const uploadImage = async (req: CustomRequest, res: Response) => {
   try {
-    const { type } = req.body;
+    const { type, productId } = req.body;
     const userId = req.userId;
 
     if (!req.file) return res.status(400).json({ error: true, message: 'Ops! Parece que nenhum arquivo foi enviado.' });
     if (!type) return res.status(400).json({ error: true, message: 'Ops! Parece que estão faltando informações.' });
+    if (type === 'product' && !productId) return res.status(400).json({ error: true, message: 'Ops! O id do produto é obrigatório.' });
 
     let folder = '';
     if (type === 'restaurant') folder = 'restaurant_images';
@@ -68,15 +69,15 @@ export const uploadImage = async (req: CustomRequest, res: Response) => {
     } else if (type === 'product') {
         const product = await prisma.product.findFirst({
             where: {
-                menu: {
-                    userId: userId,
-                },
+                id: productId,
+                menu: { userId },
             },
         });
 
         if (!product) {
-            return res.status(403).json({ error: true, message: 'Ops! Produto não encontrado.' });
+            return res.status(404).json({ error: true, message: 'Ops! Produto não encontrado.' });
         }
+
         updatedRecord = await prisma.product.update({
             where: { id: product.id },
             data: { imageUrl },

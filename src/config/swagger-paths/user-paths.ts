@@ -298,6 +298,167 @@ export const userPaths = {
       }
     }
   },
+  '/user/me': {
+    get: {
+      tags: ['Usuários'],
+      summary: 'Dados do usuário autenticado',
+      description: 'Retorna os dados do usuário logado com base no cookie de autenticação',
+      security: [{ bearerAuth: [] }],
+      responses: {
+        '200': {
+          description: 'Dados do usuário retornados com sucesso',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: false },
+                  user: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', example: 'clx1234567890abcdef' },
+                      name: { type: 'string', example: 'João Silva' },
+                      email: { type: 'string', example: 'joao@example.com' },
+                      phoneNumber: { type: 'string', example: '(11) 99999-9999' },
+                      acceptedTerms: { type: 'boolean', example: true },
+                      linkCheckout: { type: 'string', nullable: true, example: null },
+                      createdAt: { type: 'string', format: 'date-time', example: '2024-01-01T00:00:00.000Z' }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        '401': {
+          description: 'Não autenticado',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Ops! Acho algo aconteceu com seu login.' }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  '/user/logout': {
+    post: {
+      tags: ['Usuários'],
+      summary: 'Logout do usuário',
+      description: 'Encerra a sessão do usuário removendo o cookie de autenticação pelo servidor',
+      responses: {
+        '200': {
+          description: 'Logout realizado com sucesso',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: false },
+                  message: { type: 'string', example: 'Até logo!' }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  '/user/password': {
+    patch: {
+      tags: ['Usuários'],
+      summary: 'Alterar senha',
+      description: 'Altera a senha do usuário autenticado exigindo a senha atual para confirmação',
+      security: [{ bearerAuth: [] }],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              required: ['currentPassword', 'newPassword'],
+              properties: {
+                currentPassword: {
+                  type: 'string',
+                  description: 'Senha atual do usuário',
+                  example: 'senhaAtual123'
+                },
+                newPassword: {
+                  type: 'string',
+                  description: 'Nova senha desejada',
+                  example: 'novaSenha456'
+                }
+              }
+            }
+          }
+        }
+      },
+      responses: {
+        '200': {
+          description: 'Senha alterada com sucesso',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: false },
+                  message: { type: 'string', example: 'Senha alterada com sucesso!' }
+                }
+              }
+            }
+          }
+        },
+        '400': {
+          description: 'Campos ausentes, senha atual incorreta ou nova senha igual à atual',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Ops! Senha atual incorreta.' }
+                }
+              }
+            }
+          }
+        },
+        '401': {
+          description: 'Não autenticado',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Ops! Acho algo aconteceu com seu login.' }
+                }
+              }
+            }
+          }
+        },
+        '500': {
+          description: 'Erro interno do servidor',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Erro interno do servidor.' }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   '/user/forgot-password': {
     post: {
       tags: ['Usuários'],

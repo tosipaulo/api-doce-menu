@@ -5,7 +5,7 @@ import { CustomRequest } from "../types/CustomRequest";
 export const getProduct = async (req: CustomRequest, res: Response) => {
 
     const userId = req.userId;
-    const { menuId, slug } = req.body;
+    const { menuId, slug } = req.query as { menuId?: string; slug?: string };
 
     try {
 

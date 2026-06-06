@@ -1,33 +1,28 @@
 export const productPaths = {
-  '/product/all': {
-    post: {
+  '/product': {
+    get: {
       tags: ['Produto'],
       summary: 'Buscar produtos do menu',
       description: 'Retorna todos os produtos de um menu específico do usuário autenticado',
       security: [{ bearerAuth: [] }],
-      requestBody: {
-        required: true,
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              required: ['menuId', 'slug'],
-              properties: {
-                menuId: {
-                  type: 'string',
-                  description: 'ID do menu',
-                  example: 'clx1234567890abcdef'
-                },
-                slug: {
-                  type: 'string',
-                  description: 'Slug do menu',
-                  example: 'meu-menu'
-                }
-              }
-            }
-          }
+      parameters: [
+        {
+          name: 'menuId',
+          in: 'query',
+          required: false,
+          description: 'ID do menu',
+          schema: { type: 'string' },
+          example: 'clx1234567890abcdef'
+        },
+        {
+          name: 'slug',
+          in: 'query',
+          required: false,
+          description: 'Slug do menu',
+          schema: { type: 'string' },
+          example: 'meu-menu'
         }
-      },
+      ],
       responses: {
         200: {
           description: 'Produtos encontrados com sucesso',
@@ -36,39 +31,18 @@ export const productPaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: false
-                  },
+                  error: { type: 'boolean', example: false },
                   products: {
                     type: 'array',
                     items: {
                       type: 'object',
                       properties: {
-                        id: {
-                          type: 'string',
-                          example: 'clx1234567890abcdef'
-                        },
-                        name: {
-                          type: 'string',
-                          example: 'Hambúrguer'
-                        },
-                        description: {
-                          type: 'string',
-                          example: 'Hambúrguer artesanal com queijo'
-                        },
-                        price: {
-                          type: 'number',
-                          example: 25.90
-                        },
-                        imageUrl: {
-                          type: 'string',
-                          example: 'https://example.com/image.jpg'
-                        },
-                        category: {
-                          type: 'string',
-                          example: 'Lanches'
-                        }
+                        id: { type: 'string', example: 'clx1234567890abcdef' },
+                        name: { type: 'string', example: 'Brigadeiro' },
+                        description: { type: 'string', example: 'Brigadeiro de chocolate belga' },
+                        price: { type: 'number', example: 5.90 },
+                        imageUrl: { type: 'string', example: 'https://example.com/image.jpg' },
+                        category: { type: 'string', example: 'Doces' }
                       }
                     }
                   }
@@ -84,14 +58,8 @@ export const productPaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Token inválido'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Token inválido' }
                 }
               }
             }
@@ -104,14 +72,8 @@ export const productPaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Ops! Produto não encontrado.'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Ops! Produto não encontrado.' }
                 }
               }
             }
@@ -124,23 +86,15 @@ export const productPaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Erro interno do servidor'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Erro interno do servidor' }
                 }
               }
             }
           }
         }
       }
-    }
-  },
-  '/product': {
+    },
     post: {
       tags: ['Produto'],
       summary: 'Criar novo produto',
