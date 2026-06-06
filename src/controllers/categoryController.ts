@@ -4,7 +4,7 @@ import { CustomRequest } from "../types/CustomRequest";
 
 export const getCategory = async (req: CustomRequest, res: Response) => {
   const userId = req.userId;
-  const { menuId, slug } = req.body;
+  const { menuId, slug } = req.query as { menuId?: string; slug?: string };
 
   try {
     const categories = await prisma.category.findMany({

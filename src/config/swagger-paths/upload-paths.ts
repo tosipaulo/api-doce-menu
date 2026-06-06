@@ -15,7 +15,7 @@ export const uploadPaths = {
           'multipart/form-data': {
             schema: {
               type: 'object',
-              required: ['file', 'type', 'id'],
+              required: ['file', 'type'],
               properties: {
                 file: {
                   type: 'string',
@@ -27,6 +27,11 @@ export const uploadPaths = {
                   enum: ['restaurant', 'product', 'logo'],
                   description: 'Tipo de registro para atualizar',
                   example: 'restaurant'
+                },
+                productId: {
+                  type: 'string',
+                  description: 'ID do produto — obrigatório quando type é "product"',
+                  example: 'clx1234567890abcdef'
                 }
               }
             }
@@ -79,8 +84,8 @@ export const uploadPaths = {
             }
           }
         },
-        '403': {
-          description: 'Acesso negado - registro não encontrado ou não pertence ao usuário',
+        '404': {
+          description: 'Registro não encontrado ou não pertence ao usuário',
           content: {
             'application/json': {
               schema: {

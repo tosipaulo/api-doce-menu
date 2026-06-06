@@ -4,6 +4,7 @@ import { hashPassword, generateTokenJWT, comparePassword } from "../utils/token"
 import crypto from "crypto";
 import { getEmailTemplate } from "../utils/email";
 import { configSMTP, configEmail } from "../config/nodemailer"
+import { CustomRequest } from "../types/CustomRequest";
 
 export const createUser = async (req: Request, res: Response) => {
   const { name, email, password, phoneNumber } = req.body;
@@ -77,7 +78,7 @@ export const autenticateUser = async (req: Request, res: Response) => {
       return res.status(401).json({ error: true, message: "Ops! E-mail ou senha incorreto." });
     }
 
-    const token = generateTokenJWT({ email, id: user.id });
+    const token = generateTokenJWT({ email, id: user.id }, "7d");
     const isProd = process.env.NODE_ENV === 'production';
 
     res.cookie('token', token, {
@@ -102,6 +103,80 @@ export const autenticateUser = async (req: Request, res: Response) => {
     return res.status(500).json({ error: true, message: "Ops! Erro interno ao autenticar usuário" });
   }
 }
+
+export const getMe = (req: CustomRequest, res: Response) => {
+  const user = req.user!;
+
+  return res.status(200).json({
+    error: false,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      acceptedTerms: user.acceptedTerms,
+      linkCheckout: user.linkCheckout,
+      createdAt: user.createdAt,
+    },
+  });
+};
+
+export const changePassword = async (req: CustomRequest, res: Response) => {
+  const { currentPassword, newPassword } = req.body;
+  const user = req.user!;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({
+      error: true,
+      message: 'Ops! Senha atual e nova senha são obrigatórias.',
+    });
+  }
+
+  const isMatch = await comparePassword(currentPassword, user.password);
+  if (!isMatch) {
+    return res.status(400).json({
+      error: true,
+      message: 'Ops! Senha atual incorreta.',
+    });
+  }
+
+  const isSame = await comparePassword(newPassword, user.password);
+  if (isSame) {
+    return res.status(400).json({
+      error: true,
+      message: 'Ops! A nova senha não pode ser igual à senha atual.',
+    });
+  }
+
+  try {
+    const hashedPassword = await hashPassword(newPassword);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    });
+
+    return res.status(200).json({
+      error: false,
+      message: 'Senha alterada com sucesso!',
+    });
+  } catch (error) {
+    console.error('Erro ao alterar senha:', error);
+    return res.status(500).json({ error: true, message: 'Erro interno do servidor.' });
+  }
+};
+
+export const logoutUser = (req: Request, res: Response) => {
+  const isProd = process.env.NODE_ENV === 'production';
+
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: !!isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    path: '/',
+  });
+
+  return res.status(200).json({ error: false, message: 'Até logo!' });
+};
 
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;

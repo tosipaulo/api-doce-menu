@@ -3,7 +3,7 @@ import { getProduct, createProduct, updateProduct, deleteProduct } from "../cont
 
 const router = Router();
 
-router.post("/all", getProduct);
+router.get("/", getProduct);
 router.post("/", createProduct);
 router.put("/:id", updateProduct);
 

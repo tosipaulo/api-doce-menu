@@ -1,33 +1,28 @@
 export const categoryPaths = {
-  '/category/all': {
-    post: {
+  '/category': {
+    get: {
       tags: ['Categoria'],
       summary: 'Buscar categorias do menu',
       description: 'Retorna todas as categorias de um menu específico do usuário autenticado',
       security: [{ bearerAuth: [] }],
-      requestBody: {
-        required: true,
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              required: ['menuId', 'slug'],
-              properties: {
-                menuId: {
-                  type: 'string',
-                  description: 'ID do menu',
-                  example: 'clx1234567890abcdef'
-                },
-                slug: {
-                  type: 'string',
-                  description: 'Slug do menu',
-                  example: 'meu-menu'
-                }
-              }
-            }
-          }
+      parameters: [
+        {
+          name: 'menuId',
+          in: 'query',
+          required: false,
+          description: 'ID do menu',
+          schema: { type: 'string' },
+          example: 'clx1234567890abcdef'
+        },
+        {
+          name: 'slug',
+          in: 'query',
+          required: false,
+          description: 'Slug do menu',
+          schema: { type: 'string' },
+          example: 'meu-menu'
         }
-      },
+      ],
       responses: {
         200: {
           description: 'Categorias encontradas com sucesso',
@@ -36,23 +31,14 @@ export const categoryPaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: false
-                  },
+                  error: { type: 'boolean', example: false },
                   categories: {
                     type: 'array',
                     items: {
                       type: 'object',
                       properties: {
-                        id: {
-                          type: 'string',
-                          example: 'clx1234567890abcdef'
-                        },
-                        name: {
-                          type: 'string',
-                          example: 'Lanches'
-                        }
+                        id: { type: 'string', example: 'clx1234567890abcdef' },
+                        name: { type: 'string', example: 'Doces' }
                       }
                     }
                   }
@@ -68,14 +54,8 @@ export const categoryPaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Token inválido'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Token inválido' }
                 }
               }
             }
@@ -88,14 +68,8 @@ export const categoryPaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Ops! Categoria não encontrada.'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Ops! Categoria não encontrada.' }
                 }
               }
             }
@@ -108,23 +82,15 @@ export const categoryPaths = {
               schema: {
                 type: 'object',
                 properties: {
-                  error: {
-                    type: 'boolean',
-                    example: true
-                  },
-                  message: {
-                    type: 'string',
-                    example: 'Erro interno do servidor'
-                  }
+                  error: { type: 'boolean', example: true },
+                  message: { type: 'string', example: 'Erro interno do servidor' }
                 }
               }
             }
           }
         }
       }
-    }
-  },
-  '/category': {
+    },
     post: {
       tags: ['Categoria'],
       summary: 'Criar nova categoria',
