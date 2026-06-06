@@ -187,9 +187,9 @@ export const updateProduct = async (req: CustomRequest, res: Response) => {
 
 
         if(!product && menuId !== menu.id) {
-            return res.status(422).send({
+            return res.status(404).json({
                 error: true,
-                message: 'Ops! Parece que não existe esse produto.'
+                message: 'Ops! Produto não encontrado.'
             });
         }
 
@@ -231,9 +231,9 @@ export const deleteProduct = async (req: CustomRequest, res: Response) => {
         });
 
         if(!product) {
-            return res.status(422).send({
+            return res.status(404).json({
                 error: true,
-                message: 'Ops! Parece que não existe esse produto.'
+                message: 'Ops! Produto não encontrado.'
             });
         }
 

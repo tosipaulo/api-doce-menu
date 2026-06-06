@@ -22,6 +22,10 @@ const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
 const categoryRoutes_1 = __importDefault(require("./routes/categoryRoutes"));
 const analyticsRoutes_1 = __importDefault(require("./routes/analyticsRoutes"));
 const landingPageRoutes_1 = __importDefault(require("./routes/landingPageRoutes"));
+const testimonialRoutes_1 = __importDefault(require("./routes/testimonialRoutes"));
+const howItWorksRoutes_1 = __importDefault(require("./routes/howItWorksRoutes"));
+const externalLinkRoutes_1 = __importDefault(require("./routes/externalLinkRoutes"));
+const badgeRoutes_1 = __importDefault(require("./routes/badgeRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // Middlewares
@@ -132,6 +136,10 @@ app.use("/upload", uploadRoutes_1.default);
 app.use("/product", productRoutes_1.default);
 app.use("/category", categoryRoutes_1.default);
 app.use("/analytics", analyticsRoutes_1.default);
+app.use("/testimonial", testimonialRoutes_1.default);
+app.use("/how-it-works", howItWorksRoutes_1.default);
+app.use("/external-link", externalLinkRoutes_1.default);
+app.use("/badge", badgeRoutes_1.default);
 // Rota de verificação da API
 app.get("/", (req, res) => {
     res.send("API is running...");

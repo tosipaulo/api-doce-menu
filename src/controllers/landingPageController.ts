@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import { prisma } from '../lib/prisma'
 
 export const getHomePage = async (req: Request, res: Response) => {
-    
+
     const { slug } = req.query;
 
     if (!slug) {
@@ -13,47 +13,49 @@ export const getHomePage = async (req: Request, res: Response) => {
     }
 
     try {
-        const restaurant = await prisma.restaurantSettings.findFirst({
-            where: {
-                menu: {
-                    slug: String(slug)
-                }
-            },
+        const menu = await prisma.menu.findFirst({
+            where: { slug: String(slug) },
             include: {
-                menu: {
-                    select: {
-                        id: true,
-                        name: true,
-                        slug: true,
-                        userId: false
-                    }
-                }
-            }
-        });
-
-        const products = await prisma.product.findMany({
-            where: {
-                menu: {
-                    id: restaurant?.menu.id,
-                }
+                restaurantSettings: true,
+                products: {
+                    take: 6,
+                    orderBy: { createdAt: 'desc' },
+                },
+                categories: {
+                    select: { id: true, name: true },
+                },
+                testimonials: {
+                    orderBy: { createdAt: 'desc' },
+                },
+                howItWorks: {
+                    orderBy: { order: 'asc' },
+                },
+                externalLinks: true,
+                badges: true,
             },
-            take: 6,
-            orderBy: {
-                createdAt: 'desc'
-            }
         });
 
-        if (!restaurant) {
+        if (!menu || !menu.restaurantSettings) {
             return res.status(404).json({
                 error: true,
                 message: 'Restaurante não encontrado.',
             });
         }
 
+        const { restaurantSettings, products, categories, testimonials, howItWorks, externalLinks, badges } = menu;
+
         return res.status(200).json({
             error: false,
-            restaurant,
-            products
+            restaurant: {
+                ...restaurantSettings,
+                menu: { id: menu.id, name: menu.name, slug: menu.slug },
+            },
+            products,
+            categories,
+            testimonials,
+            howItWorks,
+            externalLinks,
+            badges,
         });
 
     } catch (error) {
